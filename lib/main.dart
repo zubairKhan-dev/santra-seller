@@ -7,7 +7,7 @@ import 'package:flutter_login_regis_provider/screens/register_mobile.dart';
 import 'package:flutter_login_regis_provider/utility/shared_preference.dart';
 import 'package:provider/provider.dart';
 import './screens/home.dart';
-import 'domain/user.dart';
+import 'models/user.dart';
 import 'screens/login.dart';
 
 void main() {
