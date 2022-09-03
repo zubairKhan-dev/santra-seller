@@ -8,6 +8,14 @@ InputDecoration customInputDecoration(String hintText, IconData icon) {
     ),
     hintText: hintText,
     contentPadding: EdgeInsets.fromLTRB(0.0, 15.0, 20.0, 15.0),
-    border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(5.0),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: Color(0xFF79CCC9), width: 1.0),
+    ),
+    enabledBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: Color(0xFF79CCC9), width: 1.0),
+    ),
   );
 }

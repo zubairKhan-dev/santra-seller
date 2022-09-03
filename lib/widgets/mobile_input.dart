@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login_regis_provider/widgets/custom_dropdown.dart';
+import 'package:flutter_login_regis_provider/widgets/input_decoration.dart';
 
 class MobileInput extends StatelessWidget {
   @override
@@ -14,10 +15,7 @@ class MobileInput extends StatelessWidget {
               padding: EdgeInsets.all(5),
               child: TextField(
                 style: TextStyle(fontSize: 16),
-                decoration: InputDecoration(
-                  hintText: '+91',
-                  border: OutlineInputBorder(),
-                ),
+                decoration: customInputDecoration('+91', null)
               ),
             ),
           ),
@@ -27,10 +25,7 @@ class MobileInput extends StatelessWidget {
               padding: EdgeInsets.all(5),
               child: TextField(
                 style: TextStyle(fontSize: 16),
-                decoration: InputDecoration(
-                  hintText: 'IN',
-                  border: OutlineInputBorder(),
-                ),
+                decoration: customInputDecoration('IN', null)
               ),
             ),
           ),
@@ -40,10 +35,7 @@ class MobileInput extends StatelessWidget {
               padding: EdgeInsets.all(5),
               child: TextField(
                 style: TextStyle(fontSize: 16),
-                decoration: InputDecoration(
-                  hintText: '',
-                  border: OutlineInputBorder(),
-                ),
+                decoration: customInputDecoration('', null)
               ),
             ),
           ),

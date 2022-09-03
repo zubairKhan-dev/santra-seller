@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_login_regis_provider/config/theme/theme_config.dart';
 import 'package:flutter_login_regis_provider/screens/mobile_ver.dart';
+import 'package:flutter_login_regis_provider/widgets/app_title.dart';
 import '../widgets/mobile_input.dart';
 import 'package:flutter_login_regis_provider/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
@@ -7,7 +9,7 @@ import 'package:flushbar/flushbar.dart';
 
 class RegisterMobile extends StatelessWidget {
   String mobile;
-  bool mobile_ver= true;
+  bool mobile_ver = true;
 
   @override
   Widget build(BuildContext context) {
@@ -31,21 +33,35 @@ class RegisterMobile extends StatelessWidget {
     };
 
     return Scaffold(
+      resizeToAvoidBottomInset : false,
       body: Container(
         width: double.infinity,
         padding: EdgeInsets.all(40),
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/images/bg_img_santra.png"),
+            fit: BoxFit.fitWidth,
+            alignment: Alignment.bottomCenter,
+          ),
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            Transform.scale(
+                scale: 0.7,
+                child: AppTitle(),
+              ),
             SizedBox(
               height: 40,
             ),
             Text(
               'Lets get started',
               style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Raleway'),
+                fontSize: 24,
+                fontWeight: FontWeight.w500,
+                fontFamily: 'Raleway',
+                color: Color(0xFF265198),
+              ),
             ),
             SizedBox(
               height: 20,
@@ -61,10 +77,12 @@ class RegisterMobile extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => MobileVer(mobile_register: true,),
+                        builder: (context) => MobileVer(
+                          mobile_register: true,
+                        ),
                       ));
                 },
-                color: Colors.purple,
+                color: Color(0xFF265198),
                 textColor: Colors.white,
                 child: Text('Next'),
               ),
@@ -74,14 +92,12 @@ class RegisterMobile extends StatelessWidget {
               width: double.infinity,
               child: OutlinedButton(
                 style: OutlinedButton.styleFrom(
-                  side: BorderSide(width: 1.5, color: Colors.black),
+                  side: BorderSide(width: 1.5, color: Colors.white),
                 ),
-                onPressed: () {
-                  
-                },
+                onPressed: () {},
                 child: Text(
                   'Already have an account ?',
-                  style: TextStyle(color: Colors.black),
+                  style: TextStyle(color: Colors.white),
                 ),
               ),
             ),

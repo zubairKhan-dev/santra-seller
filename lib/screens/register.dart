@@ -1,10 +1,10 @@
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter_login_regis_provider/domain/user.dart';
+import 'package:flutter_login_regis_provider/models/user.dart';
 import 'package:flutter_login_regis_provider/providers/auth_provider.dart';
 import 'package:flutter_login_regis_provider/providers/user_provider.dart';
-import 'package:flutter_login_regis_provider/screens/seller_home.dart';
+import './seller_home/index.dart';
 import 'package:flutter_login_regis_provider/utility/validator.dart';
 import 'package:flutter_login_regis_provider/utility/widgets.dart';
 import 'package:flutter_login_regis_provider/widgets/custom_dropdown.dart';
@@ -22,6 +22,7 @@ class _RegisterState extends State<Register> {
   Duration get loginTime => Duration(milliseconds: timeDilation.ceil() * 2250);
 
   final formKey = GlobalKey<FormState>();
+  final List _categories = ['Food', 'Clothing', 'Beauty'];
 
   int selectedPage = 0;
 
@@ -327,7 +328,7 @@ class _RegisterState extends State<Register> {
             FullNameInput(),
             Container(
               padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-              child: CustomDropdown(Icons.location_off, 'Enter location'),
+              child: CustomDropdown(Icons.location_off, 'Enter location', _categories),
             ),
             Container(
               padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),

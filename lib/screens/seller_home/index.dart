@@ -2,7 +2,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import './search.dart';
+import 'package:flutter_login_regis_provider/screens/seller_home/add_new_category.dart';
+import 'package:flutter_login_regis_provider/screens/seller_home/add_product.dart';
+import 'package:flutter_login_regis_provider/screens/seller_home/new_order_recieved.dart';
+import 'package:flutter_login_regis_provider/screens/seller_home/new_promotion.dart';
+import 'package:flutter_login_regis_provider/screens/seller_home/product_description.dart';
+import 'package:flutter_login_regis_provider/screens/seller_home/reports.dart';
+import 'package:flutter_login_regis_provider/screens/seller_home/view_categories.dart';
+import 'package:flutter_login_regis_provider/screens/seller_home/view_products.dart';
+import 'package:flutter_login_regis_provider/screens/seller_home/view_promotions.dart';
+import './all_orders.dart';
+import '../search.dart';
 
 class SellerHome extends StatefulWidget {
   const SellerHome({Key key}) : super(key: key);
@@ -17,7 +27,6 @@ class _SellerHomeState extends State<SellerHome> {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.grey,
-          // title: Text('Santra', textAlign: TextAlign.center,),
           actions: <Widget>[
             IconButton(icon: Icon(Icons.search), onPressed: () {
                Navigator.push(
@@ -54,7 +63,13 @@ class _SellerHomeState extends State<SellerHome> {
                             //backgroundColor: Colors.black, //<-- SEE HERE
                             side: BorderSide(color: Colors.black, width: 1),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AllOrders(),
+                            ));
+                          },
                           child: Container(
                             padding: EdgeInsets.symmetric(
                                 vertical: 40, horizontal: 20),
@@ -85,7 +100,11 @@ class _SellerHomeState extends State<SellerHome> {
                             side: BorderSide(color: Colors.black, width: 1),
                           ),
                           onPressed: () {
-                           
+                           Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => NewOrderRecieved(),
+                            ));
                           },
                           child: Container(
                             padding: EdgeInsets.symmetric(
@@ -132,7 +151,13 @@ class _SellerHomeState extends State<SellerHome> {
                             //backgroundColor: Colors.black, //<-- SEE HERE
                             side: BorderSide(color: Colors.black, width: 1),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AddNewCAtegory(),
+                            ));
+                          },
                           child: Container(
                             padding: EdgeInsets.symmetric(
                                 vertical: 40, horizontal: 20),
@@ -162,7 +187,13 @@ class _SellerHomeState extends State<SellerHome> {
                             //backgroundColor: Colors.black, //<-- SEE HERE
                             side: BorderSide(color: Colors.black, width: 1),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                           Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ViewCategories(),
+                            ));
+                          },
                           child: Container(
                             padding: EdgeInsets.symmetric(
                                 vertical: 40, horizontal: 20),
@@ -199,7 +230,13 @@ class _SellerHomeState extends State<SellerHome> {
                             //backgroundColor: Colors.black, //<-- SEE HERE
                             side: BorderSide(color: Colors.black, width: 1),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AddProduct(),
+                            ));
+                          },
                           child: Container(
                             padding: EdgeInsets.symmetric(
                                 vertical: 40, horizontal: 20),
@@ -229,7 +266,13 @@ class _SellerHomeState extends State<SellerHome> {
                             //backgroundColor: Colors.black, //<-- SEE HERE
                             side: BorderSide(color: Colors.black, width: 1),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ViewProducts(),
+                            ));
+                          },
                           child: Container(
                             padding: EdgeInsets.symmetric(
                                 vertical: 40, horizontal: 20),
@@ -275,7 +318,13 @@ class _SellerHomeState extends State<SellerHome> {
                             //backgroundColor: Colors.black, //<-- SEE HERE
                             side: BorderSide(color: Colors.black, width: 1),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => NewPromotion(),
+                            ));
+                          },
                           child: Container(
                             padding: EdgeInsets.symmetric(
                                 vertical: 40, horizontal: 20),
@@ -305,7 +354,13 @@ class _SellerHomeState extends State<SellerHome> {
                             //backgroundColor: Colors.black, //<-- SEE HERE
                             side: BorderSide(color: Colors.black, width: 1),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ViewPromotions(),
+                            ));
+                          },
                           child: Container(
                             padding: EdgeInsets.symmetric(
                                 vertical: 40, horizontal: 20),
@@ -351,37 +406,13 @@ class _SellerHomeState extends State<SellerHome> {
                             //backgroundColor: Colors.black, //<-- SEE HERE
                             side: BorderSide(color: Colors.black, width: 1),
                           ),
-                          onPressed: () {},
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 40, horizontal: 20),
-                            child: Column(
-                              children: [
-                                Icon(
-                                  Icons.wallet,
-                                  color: Colors.black,
-                                ),
-                                Text(
-                                  'Wallet',
-                                  style: TextStyle(color: Colors.black),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: Container(
-                        padding: EdgeInsets.all(10),
-                        child: OutlinedButton(
-                          style: OutlinedButton.styleFrom(
-                            //backgroundColor: Colors.black, //<-- SEE HERE
-                            side: BorderSide(color: Colors.black, width: 1),
-                          ),
-                          onPressed: () {},
+                          onPressed: () {
+                             Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Reports(),
+                            ));
+                          },
                           child: Container(
                             padding: EdgeInsets.symmetric(
                                 vertical: 40, horizontal: 20),
@@ -503,7 +534,13 @@ class _SellerHomeState extends State<SellerHome> {
                             //backgroundColor: Colors.black, //<-- SEE HERE
                             side: BorderSide(color: Colors.black, width: 1),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProductDescription(),
+                            ));
+                          },
                           child: Container(
                             padding: EdgeInsets.symmetric(
                                 vertical: 40, horizontal: 20),

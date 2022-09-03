@@ -1,12 +1,14 @@
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_login_regis_provider/domain/user.dart';
+import 'package:flutter_login_regis_provider/models/user.dart';
 import 'package:flutter_login_regis_provider/providers/auth_provider.dart';
 import 'package:flutter_login_regis_provider/providers/user_provider.dart';
 import 'package:flutter_login_regis_provider/screens/forgot_password.dart';
 import 'package:flutter_login_regis_provider/screens/login_otp.dart';
 import 'package:flutter_login_regis_provider/utility/validator.dart';
 import 'package:flutter_login_regis_provider/utility/widgets.dart';
+import 'package:flutter_login_regis_provider/widgets/app_title.dart';
+import 'package:flutter_login_regis_provider/widgets/input_decoration_standard.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_login_regis_provider/screens/register.dart';
 
@@ -71,7 +73,15 @@ class _LoginState extends State<Login> {
         FlatButton(
           padding: EdgeInsets.all(0.0),
           child: Text("Forgot password?",
-              style: TextStyle(fontWeight: FontWeight.w300)),
+              style: TextStyle(
+                decoration: TextDecoration.underline,
+                color: Colors.transparent,
+                decorationColor: Color(0xFF265198),
+                decorationThickness: 1,
+                shadows: [
+                  Shadow(color: Color(0xFF265198), offset: Offset(0, -5))
+                ],
+              ),),
           onPressed: () {
             Navigator.push(
                 context,
@@ -82,7 +92,15 @@ class _LoginState extends State<Login> {
         ),
         FlatButton(
           padding: EdgeInsets.only(left: 0.0),
-          child: Text("Sign up", style: TextStyle(fontWeight: FontWeight.w300)),
+          child: Text("Sign up", style: TextStyle(
+                decoration: TextDecoration.underline,
+                color: Colors.transparent,
+                decorationColor: Color(0xFF265198),
+                decorationThickness: 1,
+                shadows: [
+                  Shadow(color: Color(0xFF265198), offset: Offset(0, -5))
+                ],
+              )),
           onPressed: () {
             Navigator.push(
                 context,
@@ -96,75 +114,77 @@ class _LoginState extends State<Login> {
 
     return SafeArea(
       child: Scaffold(
-        body: SingleChildScrollView(
-          child: Container(
-            padding: EdgeInsets.all(40.0),
-            child: Form(
-              key: formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    'santra',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 48),
-                  ),
-                  SizedBox(
-                    height: 50.0,
-                  ),
-                  SizedBox(
-                    height: 5.0,
-                  ),
-                  TextFormField(
-                    autofocus: false,
-                    validator: validateEmail,
-                    onSaved: (value) => _userName = value,
-                    decoration:
-                        buildInputDecoration('Email/Number', Icons.email),
-                  ),
-                  SizedBox(
-                    height: 20.0,
-                  ),
-                  SizedBox(
-                    height: 5.0,
-                  ),
-                  TextFormField(
+        body: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage("assets/images/bg_img_santra.png"),
+                fit: BoxFit.fitWidth,
+                alignment: Alignment.bottomCenter),
+          ),
+          padding: EdgeInsets.all(40.0),
+          child: Form(
+            key: formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Transform.scale(
+                  scale: 0.8,
+                  child: AppTitle(),
+                ),
+                SizedBox(
+                  height: 50.0,
+                ),
+                SizedBox(
+                  height: 5.0,
+                ),
+                TextFormField(
+                  autofocus: false,
+                  validator: validateEmail,
+                  onSaved: (value) => _userName = value,
+                  decoration:
+                      standardInputDecoration('Email/Number', Icons.email),
+                ),
+                SizedBox(
+                  height: 20.0,
+                ),
+                TextFormField(
                     autofocus: false,
                     obscureText: true,
                     //validator: validatePassword,
                     onSaved: (value) => _password = value,
-                    decoration: buildInputDecoration('Password', Icons.lock),
-                  ),
-                  SizedBox(
-                    height: 20.0,
-                  ),
-                  auth.loggedInStatus == Status.Authenticating
-                      ? loading
-                      : longButtons('Login', doLogin),
-                  SizedBox(
-                    height: 8.0,
-                  ),
-                  forgotLabel,
-                  Container(
-                    width: double.infinity,
-                    child: OutlinedButton(
-                      style: OutlinedButton.styleFrom(
-                        side: BorderSide(width: 1.5, color: Colors.black),
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => LoginOtp(),
-                            ));
-                      },
-                      child: Text(
-                        'Sign In with OTP',
-                        style: TextStyle(color: Colors.black),
-                      ),
+                    decoration:
+                        standardInputDecoration('Password', Icons.lock)),
+                SizedBox(
+                  height: 20.0,
+                ),
+                auth.loggedInStatus == Status.Authenticating
+                    ? loading
+                    : longButtons('Sign In', doLogin),
+                SizedBox(
+                  height: 8.0,
+                ),
+                forgotLabel,
+                Spacer(),
+                Container(
+                  width: double.infinity,
+                  child: OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      side: BorderSide(width: 1.5, color: Colors.white),
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => LoginOtp(),
+                          ));
+                    },
+                    child: Text(
+                      'Sign In with OTP',
+                      style: TextStyle(color: Colors.white),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),

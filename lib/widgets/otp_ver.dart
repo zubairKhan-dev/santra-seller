@@ -1,30 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 
 class OtpVer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      child:
-        TextField(
-          style: TextStyle(
-            fontSize: 36
-          ),
-          decoration: InputDecoration(
-            hintText: '000000',
-            border: OutlineInputBorder(),
-            //labelText: 'Please enter 6 digit otp',
-            //labelStyle: TextStyle(fontSize: 16),
-            contentPadding: const EdgeInsets.symmetric(horizontal : 20, vertical: 30), isDense: true,
-            hintStyle: TextStyle(
-              fontSize: 36,
-              fontWeight: FontWeight.bold,
-              color: Colors.blueGrey,
-              letterSpacing: 10,
-            )
-          ),
-          textAlign: TextAlign.center,
-        ),
-      );
+      child: OtpTextField(
+        numberOfFields: 6,
+        borderColor: Color(0xFF512DA8),
+        //set to true to show as box or false to show as dash
+        showFieldAsBox: true, 
+        //runs when a code is typed in
+        onCodeChanged: (String code) {
+            //handle validation or checks here           
+        },
+        enabledBorderColor: Color(0xFF79CCC9),
+        focusedBorderColor: Color(0xFF79CCC9) ,
+        fieldWidth: 40,
+        //runs when every textfield is filled
+        onSubmit: (String verificationCode){
+            showDialog(
+                context: context,
+                builder: (context){
+                return AlertDialog(
+                    title: Text("Verification Code"),
+                    content: Text('Code entered is $verificationCode'),
+                );
+                }
+            );
+        }, // end onSubmit
+    ),
+    );
   }
 }

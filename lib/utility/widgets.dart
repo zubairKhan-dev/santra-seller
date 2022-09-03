@@ -10,11 +10,12 @@ InputDecoration buildInputDecoration(String hintText, IconData icon) {
 }
 
 MaterialButton longButtons(String title, Function fun,
-    {Color color: Colors.purple, Color textColor: Colors.white}) {
+    {Color textColor: Colors.white}) {
   return MaterialButton(
+    elevation: 10,
     onPressed: fun,
     textColor: textColor,
-    color: color,
+    color: Color(0xFF265198),
     child: SizedBox(
       width: double.infinity,
       child: Text(
@@ -22,9 +23,8 @@ MaterialButton longButtons(String title, Function fun,
         textAlign: TextAlign.center,
       ),
     ),
-    height: 45,
     minWidth: 600,
     shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(10))),
+        borderRadius: BorderRadius.all(Radius.circular(7))),
   );
 }

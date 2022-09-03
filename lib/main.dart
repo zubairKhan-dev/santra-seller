@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import './screens/home.dart';
 import 'models/user.dart';
 import 'screens/login.dart';
+import 'package:get/get.dart';
 
 void main() {
   runApp(MyApp());

@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter_login_regis_provider/domain/user.dart';
+import 'package:flutter_login_regis_provider/models/user.dart';
 import 'package:flutter_login_regis_provider/utility/app_url.dart';
 import 'package:flutter_login_regis_provider/utility/shared_preference.dart';
 //import 'package:http/http.dart';

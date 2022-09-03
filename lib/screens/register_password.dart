@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_login_regis_provider/screens/register.dart';
+import 'package:flutter_login_regis_provider/widgets/app_title.dart';
+import 'package:flutter_login_regis_provider/widgets/input_decoration_standard.dart';
 import '../widgets/input_decoration.dart';
 
 class RegisterPassword extends StatefulWidget {
@@ -123,48 +125,45 @@ class _RegisterPasswordState extends State<RegisterPassword> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.call),
-            label: 'Calls',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.camera),
-            label: 'Camera',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.chat),
-            label: 'Chats',
-          ),
-        ],
-      ),
       body: Container(
-        padding: EdgeInsets.all(40.0),
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/images/bg_img_santra.png"),
+            fit: BoxFit.fitWidth,
+            alignment: Alignment.bottomCenter,
+          ),
+        ),
+        padding: EdgeInsets.symmetric(horizontal: 40, vertical: 40),
         child: Column(
-          //mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
+            Transform.scale(
+              scale: 0.6,
+              child: AppTitle(),
+            ),
             SizedBox(
-              height: 50.0,
+              height: 30.0,
             ),
             Text(
               'Lets make it secure',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+              style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 24,
+                  color: Color(0xFF265198)),
             ),
             SizedBox(
               height: 50.0,
             ),
             TextFormField(
               autofocus: false,
-              decoration: customInputDecoration('Password', Icons.password),
+              decoration: standardInputDecoration('Email/Number', Icons.email),
             ),
             SizedBox(
               height: 20.0,
             ),
             TextFormField(
               autofocus: false,
-              decoration:
-                  customInputDecoration('Confirm Password', Icons.password),
+              decoration: standardInputDecoration('Password', Icons.password),
             ),
             SizedBox(
               height: 20.0,
@@ -181,7 +180,7 @@ class _RegisterPasswordState extends State<RegisterPassword> {
                             ));
                       }
                     : null,
-                color: Colors.purple,
+                color: Color(0xFF265198),
                 textColor: Colors.white,
                 child: Text('Sign up'),
                 disabledColor: Colors.black12,
@@ -221,12 +220,12 @@ class _RegisterPasswordState extends State<RegisterPassword> {
               width: double.infinity,
               child: OutlinedButton(
                 style: OutlinedButton.styleFrom(
-                  side: BorderSide(width: 1.5, color: Colors.black),
+                  side: BorderSide(width: 1.5, color: Colors.white),
                 ),
                 onPressed: () {},
                 child: Text(
                   'Already have an account ?',
-                  style: TextStyle(color: Colors.black),
+                  style: TextStyle(color: Colors.white),
                 ),
               ),
             ),

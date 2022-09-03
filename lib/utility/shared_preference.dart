@@ -1,5 +1,5 @@
 
-import 'package:flutter_login_regis_provider/domain/user.dart';
+import 'package:flutter_login_regis_provider/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserPreferences {
