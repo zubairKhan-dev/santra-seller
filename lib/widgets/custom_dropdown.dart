@@ -12,7 +12,17 @@ class CustomDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<String>(
-      decoration: standardInputDecoration(hintText, icon),
+      decoration: InputDecoration(
+    hintStyle: TextStyle(color: Color(0xFF265198)),
+    hintText: hintText,
+    contentPadding: EdgeInsets.fromLTRB(0.0, 15.0, 20.0, 15.0),
+    enabledBorder: UnderlineInputBorder(
+      borderSide: BorderSide(color: Color(0xFF79CCC9)),
+    ),
+    focusedBorder: UnderlineInputBorder(
+      borderSide: BorderSide(color: Color(0xFF79CCC9)),
+    ),
+  ),
       hint: Text(hintText),
       items: list.map((value) {
         return DropdownMenuItem<String>(
