@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_login_regis_provider/screens/bottom.dart';
-import 'package:flutter_login_regis_provider/widgets/search_bar.dart';
+import 'package:flutter_login_regis_provider/screens/seller_home/bottom.dart';
 import 'package:flutter_svg/svg.dart';
-import '../../constants/my_colors.dart';
+
+import '../../Constants/my_colors.dart';
 
 class AddNewCAtegory extends StatefulWidget {
-  AddNewCAtegory({key}) : super(key: key);
+  AddNewCAtegory({Key key}) : super(key: key);
   int selectedIndex = 0;
   @override
   State<AddNewCAtegory> createState() => _AddNewCAtegoryState();
@@ -36,7 +36,50 @@ class _AddNewCAtegoryState extends State<AddNewCAtegory> {
               decoration: const BoxDecoration(color: MyColors.second),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: SearchBar()
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    InkWell(
+                        onTap: () {},
+                        child: SvgPicture.asset(
+                          "assets/images/settings_icon.svg",
+                          height: size.height * 0.025,
+                        )),
+                    Expanded(
+                      child: Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: size.width * 0.05),
+                        child: SizedBox(
+                          height: size.height * 0.05,
+                          child: TextFormField(
+                            // controller: searchController,
+                            decoration: InputDecoration(
+                              isDense: true,
+                              prefixIcon: const Icon(Icons.search),
+                              hintText: "Search products",
+                              filled: true,
+                              fillColor: Colors.white,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(50),
+                                borderSide: const BorderSide(
+                                  width: 0,
+                                  style: BorderStyle.none,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () {},
+                      child: SvgPicture.asset(
+                        "assets/images/notification_icon_teal.svg",
+                        height: size.height * 0.025,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
             Container(

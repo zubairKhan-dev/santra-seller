@@ -1,99 +1,77 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
+import '../../Constants/my_colors.dart';
+import 'bottom.dart';
+
 class ProductDescription extends StatefulWidget {
-  ProductDescription({ key}) : super(key: key);
+  ProductDescription({Key key}) : super(key: key);
 
   @override
   State<ProductDescription> createState() => _ProductDescription();
 }
 
 class _ProductDescription extends State<ProductDescription> {
-  List<String> categoryList = ["Select Category", "Food", "Clothing", "Beauty"];
-  String selectedCat = "Select Category";
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return SafeArea(
         child: Scaffold(
+      bottomNavigationBar: Bottom(),
       body: SingleChildScrollView(
         child:
             Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           Container(
-            color: Colors.grey[300],
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  const Icon(Icons.settings),
-                  Expanded(
-                    child: Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: size.width * 0.05),
-                      child: TextFormField(
-                        // controller: searchController,
-                        decoration: InputDecoration(
-                          prefixIcon: const Icon(Icons.search),
-                          labelText: "Search products",
-                          fillColor: Colors.white,
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(50),
-                              borderSide: BorderSide(
-                                  color: Theme.of(context).primaryColor)),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const Icon(Icons.shopping_cart)
-                ],
-              ),
-            ),
-          ),
-          Container(
-            color: Colors.black,
-            child: const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                "3D view",
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-          ),
-          Container(
             height: size.height * 0.4,
             width: double.infinity,
-            decoration: BoxDecoration(border: Border.all(color: Colors.black)),
             child: Column(
               children: [
                 Expanded(
                   child: Image.asset(
                     "assets/images/auth_icon.png",
-                    fit: BoxFit.cover,
+                    fit: BoxFit.contain,
                   ),
                 ),
-                const Align(
-                  alignment: Alignment.bottomLeft,
-                  child: Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text(
-                      "100AED",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                    ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        "Lorem Ipsum",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                            color: MyColors.prime,
+                            borderRadius: BorderRadius.circular(10)),
+                        child: const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text(
+                            "100 AED",
+                            style: TextStyle(fontSize: 20),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 )
               ],
             ),
           ),
-          Container(
-            color: Colors.black,
-            child: const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                "Description",
-                style: TextStyle(color: Colors.white),
-              ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: size.width * 0.07),
+            child: const Text(
+              "Description",
+              style: TextStyle(color: MyColors.secondLite, fontSize: 22),
+            ),
+          ),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+            child: Divider(
+              color: MyColors.prime,
+              thickness: 1.5,
             ),
           ),
           Container(
@@ -104,14 +82,18 @@ class _ProductDescription extends State<ProductDescription> {
               child: Text("Product description will go here"),
             ),
           ),
-          Container(
-            color: Colors.black,
-            child: const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                "Reviews",
-                style: TextStyle(color: Colors.white),
-              ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: size.width * 0.07),
+            child: const Text(
+              "Reviews",
+              style: TextStyle(color: MyColors.secondLite, fontSize: 22),
+            ),
+          ),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+            child: Divider(
+              color: MyColors.prime,
+              thickness: 1.5,
             ),
           ),
           Container(
@@ -130,22 +112,33 @@ class _ProductDescription extends State<ProductDescription> {
                               padding: const EdgeInsets.all(2.0),
                               child: Image.asset("assets/images/kfc.png"),
                             )),
-                        title: RatingBar.builder(
-                          ignoreGestures: true,
-                          itemSize: 20,
-                          initialRating: 3,
-                          minRating: 1,
-                          direction: Axis.horizontal,
-                          itemCount: 5,
-                          itemPadding:
-                              const EdgeInsets.symmetric(horizontal: 4.0),
-                          itemBuilder: (context, _) => const Icon(
-                            Icons.star,
-                            color: Colors.amber,
-                          ),
-                          onRatingUpdate: (rating) {
-                            print(rating);
-                          },
+                        title: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            RatingBar.builder(
+                              ignoreGestures: true,
+                              itemSize: 20,
+                              initialRating: 3,
+                              minRating: 1,
+                              direction: Axis.horizontal,
+                              unratedColor: MyColors.prime,
+                              itemCount: 5,
+                              itemPadding:
+                                  const EdgeInsets.symmetric(horizontal: 4.0),
+                              itemBuilder: (context, _) => const Icon(
+                                Icons.star,
+                                color: MyColors.second,
+                              ),
+                              onRatingUpdate: (rating) {
+                                print(rating);
+                              },
+                            ),
+                            Text(
+                              "3/5",
+                              style: TextStyle(
+                                  color: MyColors.secondLite, fontSize: 20),
+                            )
+                          ],
                         ),
                         subtitle: const Text("Review is Important"),
                       ),
@@ -156,35 +149,69 @@ class _ProductDescription extends State<ProductDescription> {
                   );
                 }),
           ),
-          Container(
-            color: Colors.black,
-            child: const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                "Total Score",
-                style: TextStyle(color: Colors.white),
+          const SizedBox(
+            height: 10,
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: size.width * 0.07),
+            child: Text(
+              "Total Score",
+              textAlign: TextAlign.center,
+              style: TextStyle(color: MyColors.secondLite, fontSize: 22),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: size.width * 0.2,
+            ),
+            child: const Divider(
+              color: MyColors.prime,
+              thickness: 1.5,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Container(
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle, color: MyColors.secondLite),
+              height: size.height * 0.18,
+              alignment: Alignment.center,
+              child: RichText(
+                text: const TextSpan(
+                  text: '3',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 40,
+                      fontWeight: FontWeight.bold),
+                  children: <TextSpan>[
+                    TextSpan(
+                        text: '/5', style: TextStyle(color: MyColors.prime)),
+                  ],
+                ),
               ),
             ),
           ),
-          Container(
-            height: size.height * 0.2,
-            alignment: Alignment.center,
-            child: const Text("3.5", textScaleFactor: 10),
+          const SizedBox(
+            height: 20,
           ),
-          Container(
-            color: Colors.black,
-            child: const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                "Similar products",
-                style: TextStyle(color: Colors.white),
-              ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: size.width * 0.07),
+            child: const Text(
+              "Similar products",
+              style: TextStyle(color: MyColors.secondLite, fontSize: 22),
+            ),
+          ),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+            child: Divider(
+              color: MyColors.prime,
+              thickness: 1.5,
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Container(
-              height: size.height * 0.1,
+              height: size.height * 0.2,
               child: ListView.builder(
                 shrinkWrap: true,
                 itemCount: 5,
@@ -195,7 +222,10 @@ class _ProductDescription extends State<ProductDescription> {
                     child: Container(
                       decoration: BoxDecoration(
                           border: Border.all(color: Colors.black)),
-                      child: Image.asset("assets/images/kfc.png"),
+                      child: Image.asset(
+                        "assets/images/kfc.png",
+                        fit: BoxFit.contain,
+                      ),
                     ),
                   );
                 },
@@ -203,12 +233,25 @@ class _ProductDescription extends State<ProductDescription> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ElevatedButton(
-              onPressed: () {},
-              child: const Text("Add to cart"),
+            padding: EdgeInsets.symmetric(
+                horizontal: size.width * 0.1, vertical: 15),
+            child: InkWell(
+              onTap: () {},
+              child: Container(
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                    color: MyColors.secondLite,
+                    borderRadius: BorderRadius.circular(8)),
+                child: const Padding(
+                  padding: EdgeInsets.all(10.0),
+                  child: Text(
+                    "Add To Cart",
+                    style: TextStyle(color: Colors.white, fontSize: 18),
+                  ),
+                ),
+              ),
             ),
-          )
+          ),
         ]),
       ),
     ));

@@ -24,13 +24,7 @@ class _SearchState extends State<Search> {
 
   var list = ['1', '2', '3', '4'];
 
-  advanceSearch() {
-    Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => AdvacedSearch(),
-                            ));
-  }
+  
 
   @override
   Widget build(BuildContext context) {

@@ -1,414 +1,342 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_login_regis_provider/screens/bottom.dart';
+import 'package:flutter/src/foundation/key.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_login_regis_provider/Constants/my_colors.dart';
+import 'package:flutter_login_regis_provider/screens/seller_home/bottom.dart';
 import 'package:flutter_svg/svg.dart';
-import '../../constants/my_colors.dart';
-import 'dart:math' as math;
+import 'package:get/get.dart';
 
 class TrackOrder extends StatefulWidget {
-  TrackOrder({key}) : super(key: key);
-  int selectedIndex = 0;
+  const TrackOrder({Key key}) : super(key: key);
+
   @override
   State<TrackOrder> createState() => _TrackOrderState();
 }
 
 class _TrackOrderState extends State<TrackOrder> {
-  List<String> categoryList = ["Select Category", "Food", "Clothing", "Beauty"];
-  String selectedCat = "Select Category";
-  void _onItemTapped(int index) {
-    setState(() {
-      widget.selectedIndex = index;
-    });
-  }
-
-  var list= ['1','2','3'];
+  var list = ["Item 1", "Item 2", "Item 3", "Item 4"];
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return SafeArea(
-        child: Scaffold(
-      bottomNavigationBar: Bottom(),
-      backgroundColor: MyColors.prime,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              padding: EdgeInsets.symmetric(
-                  vertical: size.height * 0.025, horizontal: size.width * 0.025),
-              decoration: const BoxDecoration(color: Color(0xFFE6F2EB)),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
+      child: Scaffold(
+        bottomNavigationBar: Bottom(),
+        backgroundColor: MyColors.prime,
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: size.width * 0.01,
+                    vertical: size.height * 0.04),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     InkWell(
-                        onTap: () {},
-                        child: SvgPicture.asset(
-                          "assets/images/arrow_back.svg",
-                          height: size.height * 0.025,
-                          color: MyColors.primary,
-                        )),
-                    Expanded(
+                      onTap: () {
+                        Get.back();
+                      },
                       child: Padding(
                         padding:
                             EdgeInsets.symmetric(horizontal: size.width * 0.05),
-                        child: SizedBox(
-                            height: size.height * 0.05,
-                            child: Text(
-                              'Track Order #123',
-                              style: TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w500,
-                                  color: MyColors.primary),
-                            )),
+                        child: SvgPicture.asset(
+                          "assets/images/arrow_back.svg",
+                          height: size.height * 0.03,
+                        ),
                       ),
                     ),
-                    InkWell(
-                        onTap: () {},
-                        child: Card(
-                            elevation: 5,
-                            color: Color(0xFFCF4C5E),
-                            child: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Text(
-                                'Cancel',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ))),
+                    Padding(
+                        padding:
+                            EdgeInsets.symmetric(vertical: size.height * 0.015),
+                        child: const Text(
+                          "Track Order",
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: MyColors.second,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )),
                   ],
                 ),
               ),
-            ),
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.all(10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        SvgPicture.asset(
-                          "assets/images/pending.svg",
-                          height: size.height * 0.05,
-                          //color: MyColors.primary,
-                        ),
-                        SizedBox(height: size.height * 0.01),
-                        Text(
-                          'Pending',
-                          style: TextStyle(color: MyColors.primary),
-                        )
-                      ],
-                    ),
-                  ),
-                  Transform.rotate(
-                    angle: -math.pi,
-                    child: SvgPicture.asset(
-                      "assets/images/arrow_back.svg",
-                      height: size.height * 0.025,
-                      color: MyColors.primary,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        SvgPicture.asset(
-                          "assets/images/ready_to_ship.svg",
-                          height: size.height * 0.05,
-                          //color: MyColors.primary,
-                        ),
-                        SizedBox(height: size.height * 0.01),
-                        Text(
-                          'Ready to ship',
-                          style: TextStyle(color: Colors.white),
-                        )
-                      ],
-                    ),
-                  ),
-                  Transform.rotate(
-                    angle: -math.pi,
-                    child: SvgPicture.asset(
-                      "assets/images/arrow_back.svg",
-                      height: size.height * 0.025,
-                      color: MyColors.primary,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        SvgPicture.asset(
-                          "assets/images/delivered.svg",
-                          height: size.height * 0.05,
-                          //color: MyColors.primary,
-                        ),
-                        SizedBox(height: size.height * 0.01),
-                        Text(
-                          'Ready to ship',
-                          style: TextStyle(color: Colors.white),
-                        )
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
-            Stack(
-              children: [
-                Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.all(size.height * 0.05),
-                    decoration: BoxDecoration(
-                        color: Color(0xFFECECEC),
-                        borderRadius: BorderRadius.all(Radius.circular(30))),
-                    height: size.height * 1.1,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        for (var item in list) 
-                        Card(
-                            elevation: 5,
-                            color: MyColors.prime,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15.0),
+              Container(
+                height: size.height * 0.7,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(30)),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.all(10),
+                        width: double.infinity,
+                        child: Row(
+                          children: [
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.perm_identity,
+                                  size: 48,
+                                ),
+                                Container(
+                                  padding: EdgeInsets.all(10),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Customer Name',
+                                        style:
+                                            TextStyle(color: MyColors.second),
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                        '+9989867980809',
+                                        style: TextStyle(color: Colors.grey),
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                        'Address here',
+                                        style: TextStyle(color: Colors.grey),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
                             ),
-                            child: Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.all(20),
-                              child: Row(
+                            Spacer(),
+                            Column(
+                              children: [
+                                Text(
+                                  'Order # 132',
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                                Text(
+                                  'Business boy',
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: size.width * 0.07),
+                        child: Divider(
+                          color: MyColors.prime,
+                          thickness: 1.5,
+                        ),
+                      ),
+                      Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: size.width * 0.07),
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            "Items",
+                            style: TextStyle(
+                                fontSize: 23,
+                                fontWeight: FontWeight.bold,
+                                color: MyColors.second),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(10),
+                        child: Column(
+                          children: [
+                            for (var item in list)
+                              Row(
                                 children: [
                                   Container(
-                                    height: size.height * 0.05,
-                                    width: size.height * 0.05,
-                                    decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(
-                                                size.height * 0.01))),
-                                  ),
-                                  Spacer(),
-                                  Text('AED', style: TextStyle(color: MyColors.primary, fontWeight: FontWeight.w400, fontSize: 24),)
+                                      decoration: BoxDecoration(
+                                          border:
+                                              Border.all(color: Colors.black)),
+                                      padding: const EdgeInsets.all(10),
+                                      child: const Icon(Icons.person)),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      height: size.height * 0.06,
+                                      width: size.height * 0.18,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            item,
+                                            style: TextStyle(
+                                                color: MyColors.second,
+                                                fontSize: 17),
+                                          ),
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                          Expanded(
+                                            child: Row(
+                                              children: [
+                                                Text(
+                                                  "Item Comments",
+                                                  style: TextStyle(
+                                                      fontSize: 12,
+                                                      color:
+                                                          MyColors.secondLite),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: SvgPicture.asset(
+                                                    "assets/images/arrow_forward.svg",
+                                                    color: MyColors.second,
+                                                    height: size.height * 0.01,
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  )
                                 ],
                               ),
-                            ))
-                      ],
-                    )),
-                Container(
-                  height: size.height * 0.68,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: size.width * 0.07,
-                              vertical: size.height * 0.03),
-                          child: Container(
-                            decoration: BoxDecoration(
-                                border: Border(
-                                    bottom: BorderSide(
-                                        color: MyColors.prime, width: 1.0))),
-                            child: Column(
+                            Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Text('Order comments will come here'),
+                            )
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: size.width * 0.07),
+                        child: Divider(
+                          color: MyColors.prime,
+                          thickness: 1.5,
+                        ),
+                      ),
+                      Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.all(20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "Order ID: 4564984",
+                                  'Current Status',
                                   style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 16),
+                                      fontSize: 16, color: MyColors.second),
                                 ),
                                 SizedBox(
-                                  height: size.height * 0.035,
+                                  width: 20,
                                 ),
-                                Row(
-                                  children: [
-                                    Text('sdsd',
-                                        style:
-                                            TextStyle(color: MyColors.primary)),
-                                    SizedBox(
-                                      width: size.width * 0.25,
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 8),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: MyColors.second),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        "With Driver...",
+                                        style: TextStyle(color: Colors.white),
+                                      ),
                                     ),
-                                    Text('sdsd'),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: size.height * 0.01,
-                                ),
-                                Row(
-                                  children: [
-                                    Text('sdsd',
-                                        style:
-                                            TextStyle(color: MyColors.primary)),
-                                    SizedBox(
-                                      width: size.width * 0.25,
-                                    ),
-                                    Text('sdsd'),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: size.height * 0.01,
-                                ),
-                                Row(
-                                  children: [
-                                    Text('sdsd',
-                                        style:
-                                            TextStyle(color: MyColors.primary)),
-                                    SizedBox(
-                                      width: size.width * 0.25,
-                                    ),
-                                    Text('sdsd'),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: size.height * 0.01,
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      'sdsd',
-                                      style: TextStyle(color: MyColors.primary),
-                                    ),
-                                    SizedBox(
-                                      width: size.width * 0.25,
-                                    ),
-                                    Text('sdsd'),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: size.height * 0.01,
-                                ),
-                                Row(
-                                  children: [
-                                    Text('sdsd',
-                                        style:
-                                            TextStyle(color: MyColors.primary)),
-                                    SizedBox(
-                                      width: size.width * 0.25,
-                                    ),
-                                    Text('sdsd'),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: size.height * 0.05,
+                                  ),
                                 )
                               ],
                             ),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: size.width * 0.07,
-                              vertical: size.height * 0.03),
-                          child: Container(
-                            decoration: BoxDecoration(
-                                border: Border(
-                                    bottom: BorderSide(
-                                        color: MyColors.prime, width: 1.0))),
-                            child: Column(
+                            SizedBox(height: 10),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "Order ID: 4564984",
+                                  'Delivery Day',
                                   style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 16),
+                                      fontSize: 16, color: MyColors.second),
                                 ),
                                 SizedBox(
-                                  height: size.height * 0.035,
+                                  width: 20,
                                 ),
-                                Row(
-                                  children: [
-                                    Text('sdsd',
-                                        style:
-                                            TextStyle(color: MyColors.primary)),
-                                    SizedBox(
-                                      width: size.width * 0.25,
-                                    ),
-                                    Text('sdsd'),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: size.height * 0.01,
-                                ),
-                                Row(
-                                  children: [
-                                    Text('sdsd',
-                                        style:
-                                            TextStyle(color: MyColors.primary)),
-                                    SizedBox(
-                                      width: size.width * 0.25,
-                                    ),
-                                    Text('sdsd'),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: size.height * 0.01,
-                                ),
-                                Row(
-                                  children: [
-                                    Text('sdsd',
-                                        style:
-                                            TextStyle(color: MyColors.primary)),
-                                    SizedBox(
-                                      width: size.width * 0.25,
-                                    ),
-                                    Text('sdsd'),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: size.height * 0.01,
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      'sdsd',
-                                      style: TextStyle(color: MyColors.primary),
-                                    ),
-                                    SizedBox(
-                                      width: size.width * 0.25,
-                                    ),
-                                    Text('sdsd'),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: size.height * 0.01,
-                                ),
-                                Row(
-                                  children: [
-                                    Text('sdsd',
-                                        style:
-                                            TextStyle(color: MyColors.primary)),
-                                    SizedBox(
-                                      width: size.width * 0.25,
-                                    ),
-                                    Text('sdsd'),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: size.height * 0.05,
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    "Sun, Sep 4, 2022",
+                                    style: TextStyle(),
+                                  ),
                                 )
                               ],
                             ),
-                          ),
+                            SizedBox(height: 10),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Amount',
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                      fontSize: 16, color: MyColors.second),
+                                ),
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    "AED 200",
+                                    style: TextStyle(),
+                                  ),
+                                )
+                              ],
+                            ),
+                            SizedBox(height: 10),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Payment Method',
+                                  style: TextStyle(
+                                      fontSize: 16, color: MyColors.second),
+                                ),
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    "Card",
+                                    style: TextStyle(),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-          ],
+              )
+            ],
+          ),
         ),
       ),
-    ));
+    );
   }
 }
