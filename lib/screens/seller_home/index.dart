@@ -14,7 +14,6 @@ import 'package:flutter_login_regis_provider/screens/seller_home/view_promotions
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import './all_orders.dart';
-
 import 'bottom_swaped.dart';
 
 class SellerHome extends StatefulWidget {

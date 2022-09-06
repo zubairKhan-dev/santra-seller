@@ -45,6 +45,7 @@ dependencies:
   dropdown_button2: ^1.7.2
   flutter_switch: ^0.2.2
   syncfusion_flutter_sliders: ^18.4.49-beta
+  file_picker: ^2.1.7
   
 
 dev_dependencies:

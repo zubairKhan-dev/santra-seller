@@ -15,6 +15,9 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_svg/svg.dart';
 import '../constants/my_colors.dart';
+import 'package:file_picker/file_picker.dart';
+import 'dart:convert';
+import 'dart:io';
 
 class Register extends StatefulWidget {
   @override
@@ -65,6 +68,23 @@ class _RegisterState extends State<Register> {
     setState(() {
       selectedIndex = index;
     });
+  }
+
+  filePick() async {
+    FilePickerResult result = await FilePicker.platform.pickFiles();
+
+    if (result != null) {
+      print('file picker========');
+      print(result.files.single.path);
+      File file = File(result.files.single.path);
+      List<int> fileInByte = file.readAsBytesSync();
+      String fileInBase64 = base64Encode(fileInByte);
+      print('file in base 64');
+      print(fileInBase64);
+      return fileInBase64;
+    } else {
+      // User canceled the picker
+    }
   }
 
   @override
@@ -323,10 +343,16 @@ class _RegisterState extends State<Register> {
               SizedBox(
                 height: 40,
               ),
-              SvgPicture.asset(
-                "assets/images/business_logo.svg",
-                height: size.height * 0.25,
+              GestureDetector(
+                onTap: () {
+                  filePick();
+                },
+                child: SvgPicture.asset(
+                  "assets/images/business_logo.svg",
+                  height: size.height * 0.25,
+                ),
               ),
+
               //const Spacer(),
               SizedBox(
                 height: 20,
@@ -352,8 +378,22 @@ class _RegisterState extends State<Register> {
             Container(
               padding: EdgeInsets.symmetric(
                   horizontal: size.width * 0.07, vertical: size.height * 0.005),
-              child:
-                  CustomDropdown(Icons.flag, 'Select Nationality', _categories),
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: Icon(
+                      Icons.flag_outlined,
+                      color: MyColors.primary,
+                    ),
+                  ),
+                  Expanded(
+                    flex: 6,
+                    child: CustomDropdown(
+                        Icons.flag, 'Select Nationality', _categories),
+                  ),
+                ],
+              ),
             ),
             Container(
               padding: EdgeInsets.symmetric(
@@ -385,7 +425,7 @@ class _RegisterState extends State<Register> {
         return Column(
           children: [
             Container(
-              padding: EdgeInsets.all(10),
+              //padding: EdgeInsets.all(10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -468,7 +508,7 @@ class _RegisterState extends State<Register> {
               ),
             ),
             Container(
-              padding: EdgeInsets.all(10),
+              //padding: EdgeInsets.all(10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
