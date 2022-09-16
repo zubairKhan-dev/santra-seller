@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_login_regis_provider/providers/seller_provider.dart';
 import 'package:flutter_login_regis_provider/widgets/custom_dropdown.dart';
+import 'package:flutter_login_regis_provider/widgets/loading.dart';
 import '../../widgets/input_decoration.dart';
+import 'package:provider/provider.dart';
+import 'package:flushbar/flushbar.dart';
 
 class NewPromotion extends StatefulWidget {
   NewPromotion({Key key}) : super(key: key);
@@ -10,9 +14,49 @@ class NewPromotion extends StatefulWidget {
 }
 
 class _NewPromotionState extends State<NewPromotion> {
+  final formKey = GlobalKey<FormState>();
+  var promotion_name,
+      promotion_type,
+      promotion_description,
+      promotion_expiry,
+      promotion_value,
+      promotion_start= '';
+
   @override
   Widget build(BuildContext context) {
+    SellerProvider seller = Provider.of<SellerProvider>(context);
     Size size = MediaQuery.of(context).size;
+
+    var addPromotion= () {
+      final form = formKey.currentState;
+      if (form.validate()) {
+        form.save();
+        seller.add_promotions(promotion_name, promotion_type, promotion_description, promotion_start, promotion_expiry, promotion_value).then((response) {
+          print(response);
+          if (response['status']) {
+            Flushbar(
+              title: 'Success!',
+              message: response['message'],
+              duration: Duration(seconds: 3),
+            ).show(context);
+          } else {
+            Flushbar(
+              title: 'Fail!',
+              message: response['messsage'],
+              duration: Duration(seconds: 3),
+            ).show(context);
+          }
+        });
+      }
+      else {
+        Flushbar(
+          title: 'Invalid form',
+          message: 'Please complete the form properly',
+          duration: Duration(seconds: 3),
+        ).show(context);
+      }
+    };
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -25,7 +69,10 @@ class _NewPromotionState extends State<NewPromotion> {
       body: Container(
         padding: EdgeInsets.all(10),
         width: double.infinity,
-        child: Column(
+        child:
+        Form(
+          key: formKey,
+          child: Column(
           children: [
             Container(
               padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
@@ -38,6 +85,9 @@ class _NewPromotionState extends State<NewPromotion> {
                   Expanded(
                       flex: 4,
                       child: TextFormField(
+                        validator: (value) =>
+                            value.isEmpty ? 'Please enter promotion name' : null,
+                        onSaved: (value) => promotion_name = value,
                         autofocus: false,
                         decoration: customInputDecoration(
                             "Ingredients", Icons.food_bank),
@@ -55,8 +105,12 @@ class _NewPromotionState extends State<NewPromotion> {
                   ),
                   Expanded(
                     flex: 4,
-                    child:
-                        CustomDropdown(null, 'Percentage/Amount', ['a', 'b']),
+                    child: CustomDropdown(
+                      null,
+                      'Percentage/Amount',
+                      ['a', 'b'],
+                      (value) => promotion_type = value,
+                    ),
                   ),
                 ],
               ),
@@ -75,7 +129,10 @@ class _NewPromotionState extends State<NewPromotion> {
                     child: Container(
                       padding: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
                       child: TextFormField(
+                        validator: (value) =>
+                            value.isEmpty ? 'Please enter description' : null,
                         autofocus: false,
+                        onSaved: (value) => promotion_description = value,
                         decoration: InputDecoration(
                           hintText: 'Enter Description here',
                           contentPadding: EdgeInsets.symmetric(
@@ -95,11 +152,35 @@ class _NewPromotionState extends State<NewPromotion> {
                 children: [
                   Expanded(
                     flex: 1,
+                    child: Text('Start'),
+                  ),
+                  Expanded(
+                      flex: 4,
+                      child: TextFormField(
+                        validator: (value) =>
+                            value.isEmpty ? 'Please enter start date' : null,
+                        onSaved: (value) => promotion_expiry = promotion_start,
+                        autofocus: false,
+                        decoration:
+                            customInputDecoration("/ /", Icons.calendar_month),
+                      )),
+                ],
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 1,
                     child: Text('Expiry'),
                   ),
                   Expanded(
                       flex: 4,
                       child: TextFormField(
+                        validator: (value) =>
+                            value.isEmpty ? 'Please enter expiry date' : null,
+                        onSaved: (value) => promotion_expiry = value,
                         autofocus: false,
                         decoration:
                             customInputDecoration("/ /", Icons.calendar_month),
@@ -117,8 +198,8 @@ class _NewPromotionState extends State<NewPromotion> {
                   ),
                   Expanded(
                     flex: 4,
-                    child:
-                        CustomDropdown(null, 'Percentage/Amount', ['a', 'b']),
+                    child: CustomDropdown(
+                        null, 'Percentage/Amount', ['a', 'b'], () {}),
                   ),
                 ],
               ),
@@ -134,6 +215,9 @@ class _NewPromotionState extends State<NewPromotion> {
                   Expanded(
                       flex: 4,
                       child: TextFormField(
+                        validator: (value) =>
+                            value.isEmpty ? 'Please enter amount' : null,
+                        onSaved: (value) => promotion_value = value,
                           autofocus: false,
                           decoration:
                               customInputDecoration("20", Icons.money))),
@@ -144,13 +228,18 @@ class _NewPromotionState extends State<NewPromotion> {
             Container(
               width: double.infinity,
               margin: EdgeInsets.all(10),
-              child: OutlinedButton(
+              child:
+              seller.isLoading ?
+                Loading() :
+              OutlinedButton(
                 style: OutlinedButton.styleFrom(
                   side: BorderSide(width: 2, color: Colors.black),
-               
                 ),
-                onPressed: () {},
-                child: Text(
+                onPressed: () {
+                  addPromotion();
+                },
+                child:
+                Text(
                   'Add',
                   style: TextStyle(color: Colors.black),
                 ),
@@ -158,6 +247,8 @@ class _NewPromotionState extends State<NewPromotion> {
             ),
           ],
         ),
+        )
+        
       ),
     );
   }

@@ -5,6 +5,7 @@ import 'package:flutter_login_regis_provider/models/user.dart';
 class UserProvider extends ChangeNotifier{
 
   User _user = User();
+  
 
   User get user => _user;
 

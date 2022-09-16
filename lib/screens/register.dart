@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_login_regis_provider/models/user.dart';
 import 'package:flutter_login_regis_provider/providers/auth_provider.dart';
+import 'package:flutter_login_regis_provider/providers/register_provider.dart';
 import 'package:flutter_login_regis_provider/providers/user_provider.dart';
+
+import 'package:flutter_login_regis_provider/screens/dashboard.dart';
 import 'package:flutter_login_regis_provider/widgets/input_decoration_standard.dart';
 import './seller_home/index.dart';
 import 'package:flutter_login_regis_provider/utility/validator.dart';
@@ -18,6 +21,11 @@ import '../constants/my_colors.dart';
 import 'package:file_picker/file_picker.dart';
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../screens/bottom.dart';
+import 'package:dio/dio.dart';
+import '../utility/app_url.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -25,6 +33,41 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
+  List cities = [];
+  List arr = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getCities();
+  }
+
+  Future<Map<String, dynamic>> getCities() async {
+    var result;
+
+    Response response = await Dio().get(AppUrl.getCities);
+
+    if (response.statusCode == 200) {
+      print('done-lists');
+      print(response.data['data'][0]['city_name']);
+      arr = [];
+      (response.data['data']).asMap().entries.map((entry) {
+        int idx = entry.key;
+        String val = response.data['data'][idx]['city_name'];
+        arr.add(val);
+      }).toList();
+      setState(() {
+        cities = arr;
+      });
+
+      print('citieeesssssss');
+      print(cities);
+    } else {}
+
+    return result;
+  }
+
   Duration get loginTime => Duration(milliseconds: timeDilation.ceil() * 2250);
 
   final formKey = GlobalKey<FormState>();
@@ -38,29 +81,27 @@ class _RegisterState extends State<Register> {
   var personal = false;
   var logo = false;
   var status = false;
+  var first_name;
+  var last_name;
+  var user_email;
+  var phone_number;
+  var user_country;
+  var user_gender;
+  var date_of_birth;
 
-  String full_name,
-      user_email,
-      user_password,
-      _confirmPassword,
-      phone_number,
-      user_gender,
-      date_of_birth,
-      user_date,
-      user_status,
-      user_country,
+  String business_name,
       license_id,
       emirates_id,
-      license_s_date,
-      license_e_date,
       license_city,
       business_email,
-      business_number,
-      business_date,
-      business_name;
+      business_number;
 
-  DateTime _selectedDate;
+  var seller_code;
+
+  DateTime _license_s_date;
+  DateTime _license_e_date;
   TextEditingController _textEditingController = TextEditingController();
+  var logo_data;
 
   int selectedIndex = 0;
 
@@ -81,6 +122,9 @@ class _RegisterState extends State<Register> {
       String fileInBase64 = base64Encode(fileInByte);
       print('file in base 64');
       print(fileInBase64);
+      setState(() {
+        logo_data = fileInBase64;
+      });
       return fileInBase64;
     } else {
       // User canceled the picker
@@ -91,6 +135,7 @@ class _RegisterState extends State<Register> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     AuthProvider auth = Provider.of<AuthProvider>(context);
+    RegisterProvider register = Provider.of<RegisterProvider>(context);
 
     var loading = Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -100,85 +145,107 @@ class _RegisterState extends State<Register> {
       ],
     );
 
-    var doRegister = () {
-      // print('on doRegister');
-
-      // final form = formKey.currentState;
-      // if (form.validate()) {
-      //   form.save();
-
-      //   auth.loggedInStatus = Status.Authenticating;
-      //   auth.notify();
-
-      //   Future.delayed(loginTime).then((_) {
-      //     Navigator.pushReplacementNamed(context, '/login');
-      //     auth.loggedInStatus = Status.LoggedIn;
-      //     auth.notify();
-      //   });
-
-      //   // now check confirm password
-      //   if (true) {
-      //     auth
-      //         .register(
-      //             full_name,
-      //             user_email,
-      //             user_password,
-      //             phone_number,
-      //             user_gender,
-      //             date_of_birth,
-      //             user_date,
-      //             user_status,
-      //             user_country,
-      //             license_id,
-      //             emirates_id,
-      //             license_s_date,
-      //             license_e_date,
-      //             license_city,
-      //             business_email,
-      //             business_number,
-      //             business_date,
-      //             business_name)
-      //         .then((response) {
-      //       if (response['status']) {
-      //         print('yaay');
-      //         print(response);
-      //         User user = response['data'];
-      //         Provider.of<UserProvider>(context, listen: false).setUser(user);
-      //         Navigator.pushReplacementNamed(context, '/login');
-      //       } else {
-      //         Flushbar(
-      //           title: 'Registration fail',
-      //           message: response.toString(),
-      //           duration: Duration(seconds: 10),
-      //         ).show(context);
-      //       }
-      //     });
-      //   } else {
-      //     Flushbar(
-      //       title: 'Mismatch password',
-      //       message: 'Please enter valid confirm password',
-      //       duration: Duration(seconds: 10),
-      //     ).show(context);
-      //   }
-      // } else {
-      //   Flushbar(
-      //     title: 'Invalid form',
-      //     message: 'Please complete the form properly',
-      //     duration: Duration(seconds: 10),
-      //   ).show(context);
-      // }
-
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => SellerHome(),
-          ));
+    var doRegister = () async {
+      final form = formKey.currentState;
+      if (form.validate()) {
+        form.save();
+        if (true) {
+          register
+              .seller_business(
+                  business_name,
+                  license_id,
+                  emirates_id,
+                  _license_s_date,
+                  _license_e_date,
+                  license_city,
+                  business_email,
+                  business_number)
+              .then((response) {
+            if (response['status']) {
+              print('yaay');
+              print(response);
+            } else {
+              Flushbar(
+                title: 'Registration fail',
+                message: response.toString(),
+                duration: Duration(seconds: 10),
+              ).show(context);
+            }
+          });
+        } else {
+          Flushbar(
+            title: 'Mismatch password',
+            message: 'Please enter valid confirm password',
+            duration: Duration(seconds: 10),
+          ).show(context);
+        }
+      } else {
+        Flushbar(
+          title: 'Invalid form',
+          message: 'Please complete the form properly',
+          duration: Duration(seconds: 10),
+        ).show(context);
+      }
     };
 
-    _selectDate(BuildContext context) async {
+    var logoRegister = () async {
+      register.logo_register(logo_data).then((response) {
+        if (response['status']) {
+          print('yaay logo!!');
+          print(response);
+        } else {
+          Flushbar(
+            title: 'Registration fail',
+            message: response.toString(),
+            duration: Duration(seconds: 10),
+          ).show(context);
+        }
+      });
+    };
+
+    var personalRegister = () async {
+      register
+          .personal_register(first_name, last_name, user_email, phone_number,
+              user_country, user_gender, date_of_birth)
+          .then((response) {
+        if (response['status']) {
+          print('yaay personal!!');
+          print(response);
+        } else {
+          Flushbar(
+            title: 'Registration fail',
+            message: response.toString(),
+            duration: Duration(seconds: 10),
+          ).show(context);
+        }
+      });
+    };
+
+    var submitApproval = () async {
+      register.submit_approval().then((response) {
+        if (response['status']) {
+          print('yaay submit!!');
+          print(response);
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => SellerHome(),
+              ));
+        } else {
+          Flushbar(
+            title: 'Registration fail',
+            message: response.toString(),
+            duration: Duration(seconds: 10),
+          ).show(context);
+        }
+      });
+    };
+
+    _selectDateS(BuildContext context) async {
       DateTime newSelectedDate = await showDatePicker(
           context: context,
-          initialDate: _selectedDate != null ? _selectedDate : DateTime.now(),
+          initialDate:
+              _license_s_date != null ? _license_s_date : DateTime.now(),
           firstDate: DateTime(2000),
           lastDate: DateTime(2040),
           builder: (BuildContext context, Widget child) {
@@ -197,9 +264,41 @@ class _RegisterState extends State<Register> {
           });
 
       if (newSelectedDate != null) {
-        _selectedDate = newSelectedDate;
+        _license_s_date = newSelectedDate;
         _textEditingController
-          ..text = DateFormat.yMMMd().format(_selectedDate)
+          ..text = DateFormat.yMMMd().format(_license_e_date)
+          ..selection = TextSelection.fromPosition(TextPosition(
+              offset: _textEditingController.text.length,
+              affinity: TextAffinity.upstream));
+      }
+    }
+
+    _selectDateE(BuildContext context) async {
+      DateTime newSelectedDate = await showDatePicker(
+          context: context,
+          initialDate:
+              _license_s_date != null ? _license_s_date : DateTime.now(),
+          firstDate: DateTime(2000),
+          lastDate: DateTime(2040),
+          builder: (BuildContext context, Widget child) {
+            return Theme(
+              data: ThemeData.dark().copyWith(
+                colorScheme: ColorScheme.dark(
+                  primary: Colors.deepPurple,
+                  onPrimary: Colors.white,
+                  surface: Colors.blueGrey,
+                  onSurface: Colors.yellow,
+                ),
+                dialogBackgroundColor: Colors.blue[500],
+              ),
+              child: child,
+            );
+          });
+
+      if (newSelectedDate != null) {
+        _license_s_date = newSelectedDate;
+        _textEditingController
+          ..text = DateFormat.yMMMd().format(_license_e_date)
           ..selection = TextSelection.fromPosition(TextPosition(
               offset: _textEditingController.text.length,
               affinity: TextAffinity.upstream));
@@ -216,7 +315,7 @@ class _RegisterState extends State<Register> {
               child: TextFormField(
                   autofocus: false,
                   //validator: validateEmail,
-                  onSaved: (value) => full_name = value,
+                  onSaved: (value) => business_name = value,
                   decoration: standardInputDecoration(
                       'Business name', Icons.business_center_sharp)),
             ),
@@ -226,7 +325,7 @@ class _RegisterState extends State<Register> {
               child: TextFormField(
                 // autofocus: false,
                 // validator: validateEmail,
-                // onSaved: (value) => user_email = value,
+                onSaved: (value) => license_id = value,
                 decoration:
                     standardInputDecoration("License ID", Icons.perm_identity),
               ),
@@ -239,7 +338,7 @@ class _RegisterState extends State<Register> {
                 //validator: validateEmail,
                 controller: _textEditingController,
                 onTap: () {
-                  _selectDate(context);
+                  _selectDateS(context);
                 },
                 decoration: standardInputDecoration(
                     "License insurence date", Icons.calendar_month),
@@ -253,7 +352,7 @@ class _RegisterState extends State<Register> {
                 //validator: validateEmail,
                 controller: _textEditingController,
                 onTap: () {
-                  _selectDate(context);
+                  _selectDateE(context);
                 },
                 decoration: standardInputDecoration(
                     "License Expiry date", Icons.calendar_month),
@@ -265,7 +364,7 @@ class _RegisterState extends State<Register> {
               child: TextFormField(
                 autofocus: false,
                 //validator: validateEmail,
-                onSaved: (value) => user_gender = value,
+                onSaved: (value) => license_city = value,
                 decoration: standardInputDecoration(
                     "License Issuance city", Icons.location_city_rounded),
               ),
@@ -276,7 +375,7 @@ class _RegisterState extends State<Register> {
               child: TextFormField(
                 autofocus: false,
                 //validator: validateEmail,
-                onSaved: (value) => date_of_birth = value,
+                onSaved: (value) => business_email = value,
                 decoration:
                     standardInputDecoration("Business Email", Icons.mail),
               ),
@@ -289,21 +388,11 @@ class _RegisterState extends State<Register> {
                 obscureText: true,
                 validator: (value) =>
                     value.isEmpty ? 'Please enter password' : null,
-                onSaved: (value) => user_password = value,
+                onSaved: (value) => business_number = value,
                 decoration: standardInputDecoration(
                     "Business Number", Icons.phone_android),
               ),
             ),
-            // SizedBox(height: 20.0,),
-            // Text('Confirm Password'),
-            // SizedBox(height: 5.0,),
-            // TextFormField(
-            //   autofocus: false,
-            //   obscureText: true,
-            //   validator: (value)=>value.isEmpty?'confirm password':null,
-            //   onSaved: (value) => _confirmPassword = value,
-            //   decoration: buildInputDecoration("Enter Confirm Password", Icons.lock),
-            // ),
             Container(
               padding: EdgeInsets.symmetric(
                   horizontal: size.width * 0.07, vertical: size.height * 0.005),
@@ -312,23 +401,9 @@ class _RegisterState extends State<Register> {
                 obscureText: true,
                 validator: (value) =>
                     value.isEmpty ? 'Please enter user date' : null,
-                onSaved: (value) => user_date = value,
+                onSaved: (value) => emirates_id = value,
                 decoration:
                     standardInputDecoration("Emirates ID", Icons.perm_identity),
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.symmetric(
-                  horizontal: size.width * 0.07, vertical: size.height * 0.005),
-              child: TextFormField(
-                autofocus: false,
-                obscureText: true,
-                validator: (value) =>
-                    value.isEmpty ? 'Please enter user status' : null,
-                onSaved: (value) => user_status = value,
-                decoration:
-                    standardInputDecoration("License Picture", Icons.photo),
-                style: TextStyle(fontSize: 16),
               ),
             ),
           ],
@@ -374,7 +449,7 @@ class _RegisterState extends State<Register> {
       } else if (personal) {
         return Column(
           children: [
-            FullNameInput(),
+            FullNameInput((val) => first_name = val, (val) => last_name = val),
             Container(
               padding: EdgeInsets.symmetric(
                   horizontal: size.width * 0.07, vertical: size.height * 0.005),
@@ -390,7 +465,9 @@ class _RegisterState extends State<Register> {
                   Expanded(
                     flex: 6,
                     child: CustomDropdown(
-                        Icons.flag, 'Select Nationality', _categories),
+                        Icons.flag, 'Select Nationality', cities, (val){setState(() {
+                          user_country= val;
+                        });}),
                   ),
                 ],
               ),
@@ -400,8 +477,8 @@ class _RegisterState extends State<Register> {
                   horizontal: size.width * 0.07, vertical: size.height * 0.005),
               child: TextFormField(
                 autofocus: false,
-                validator: validateEmail,
-                //onSaved: (value) => user_email = value,
+                //validator: validateEmail,
+                onSaved: (value) => user_email = value,
                 decoration: standardInputDecoration("Email", Icons.email),
               ),
             ),
@@ -412,11 +489,33 @@ class _RegisterState extends State<Register> {
                 autofocus: false,
                 //validator: validateEmail,
                 //controller: _textEditingController,
-                onTap: () {
-                  _selectDate(context);
-                },
+                onSaved: (value) => date_of_birth = value,
                 decoration: standardInputDecoration(
                     "Date of Birth", Icons.calendar_month),
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.symmetric(
+                  horizontal: size.width * 0.07, vertical: size.height * 0.005),
+              child: TextFormField(
+                autofocus: false,
+                //validator: validateEmail,
+                //controller: _textEditingController,
+                onSaved: (value) => phone_number = value,
+                decoration:
+                    standardInputDecoration("Phone Number", Icons.phone),
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.symmetric(
+                  horizontal: size.width * 0.07, vertical: size.height * 0.005),
+              child: TextFormField(
+                autofocus: false,
+                //validator: validateEmail,
+                //controller: _textEditingController,
+                onSaved: (value) => user_gender = value,
+                decoration:
+                    standardInputDecoration("Gender", Icons.perm_identity),
               ),
             ),
           ],
@@ -604,150 +703,8 @@ class _RegisterState extends State<Register> {
     return SafeArea(
       child: Scaffold(
           backgroundColor: MyColors.prime,
-          bottomNavigationBar: Container(
-            height: size.height * 0.1,
-            child: BottomNavigationBar(
-              type: BottomNavigationBarType.fixed,
-              elevation: 0,
-              selectedIconTheme: const IconThemeData(color: Colors.black),
-              backgroundColor: MyColors.prime,
-              unselectedItemColor: Colors.black,
-              items: <BottomNavigationBarItem>[
-                BottomNavigationBarItem(
-                    backgroundColor: Colors.black,
-                    activeIcon: Container(
-                      height: 40,
-                      width: 50,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: MyColors.second,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: SvgPicture.asset(
-                          "assets/images/home_icon.svg",
-                          color: MyColors.prime,
-                        ),
-                      ),
-                    ),
-                    icon: SvgPicture.asset(
-                      "assets/images/home_icon.svg",
-                      color: MyColors.second,
-                    ),
-                    label: "Logo"),
-                BottomNavigationBarItem(
-                  backgroundColor: Colors.black,
-                  activeIcon: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                    child: Container(
-                        height: 40,
-                        width: 50,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: MyColors.second,
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: SvgPicture.asset(
-                            "assets/images/dashboard_icon.svg",
-                            color: MyColors.prime,
-                          ),
-                        )),
-                  ),
-                  icon: Container(
-                    height: 40,
-                    child: SvgPicture.asset(
-                      "assets/images/dashboard_icon.svg",
-                      color: MyColors.second,
-                    ),
-                  ),
-                  label: 'Dashboard',
-                ),
-                BottomNavigationBarItem(
-                  backgroundColor: Colors.white,
-                  activeIcon: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                    child: Container(
-                        height: 40,
-                        width: 50,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: MyColors.second,
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: SvgPicture.asset(
-                            "assets/images/user_icon.svg",
-                            color: MyColors.prime,
-                          ),
-                        )),
-                  ),
-                  icon: SvgPicture.asset(
-                    "assets/images/user_icon.svg",
-                    color: MyColors.second,
-                  ),
-                  label: 'Profile',
-                ),
-                BottomNavigationBarItem(
-                  activeIcon: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                    child: Container(
-                        height: 40,
-                        width: 50,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: MyColors.second,
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: SvgPicture.asset(
-                            "assets/images/cart_icon.svg",
-                            color: MyColors.prime,
-                          ),
-                        )),
-                  ),
-                  backgroundColor: Colors.black,
-                  icon: SvgPicture.asset(
-                    "assets/images/cart_icon.svg",
-                    color: MyColors.second,
-                  ),
-                  label: 'Orders',
-                ),
-                BottomNavigationBarItem(
-                  backgroundColor: Colors.black,
-                  activeIcon: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                    child: Container(
-                        height: 40,
-                        width: 50,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: MyColors.second,
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: SvgPicture.asset(
-                            "assets/images/notification_icon.svg",
-                            color: MyColors.prime,
-                          ),
-                        )),
-                  ),
-                  icon: SvgPicture.asset(
-                    "assets/images/notification_icon.svg",
-                    color: MyColors.second,
-                  ),
-                  label: 'Notification',
-                ),
-              ],
-              currentIndex: selectedIndex,
-              selectedItemColor: Colors.black,
-              onTap: _onItemTapped,
-            ),
-          ),
+          bottomNavigationBar:
+              Container(height: size.height * 0.1, child: Bottom()),
           body: SingleChildScrollView(
             child: Column(
               children: [
@@ -1026,19 +983,22 @@ class _RegisterState extends State<Register> {
                       _getRegister(),
 
                       //Spacer(),
-                      auth.loggedInStatus == Status.Authenticating
+                      auth.loggedInStatus == true
                           ? loading
                           : Container(
                               padding: EdgeInsets.symmetric(
                                   vertical: size.height * 0.03,
                                   horizontal: size.width * 0.2),
-                              child: logo
-                                  ? null
-                                  : status
-                                      ? longButtons(
-                                          'Submit for approval', doRegister)
-                                      : longButtons("Save", doRegister),
-                            )
+                              child: business
+                                  ? longButtons('Save', doRegister)
+                                  : logo
+                                      ? longButtons('Save', logoRegister)
+                                      : personal
+                                          ? longButtons(
+                                              'Save', personalRegister)
+                                          : longButtons(
+                                              'Submit for approval',submitApproval)
+                                            )
                     ],
                   ),
                 ),

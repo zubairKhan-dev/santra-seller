@@ -61,21 +61,21 @@ class _ReportDetailState extends State<ReportDetail> {
                             child: Padding(
                               padding: const EdgeInsets.all(5.0),
                               child:
-                                  CustomDropdown(Icons.abc, 'Select Category', _categories),
+                                  CustomDropdown(Icons.abc, 'Select Category', _categories, (){}),
                             )),
                         Expanded(
                             flex: 1,
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child:
-                                  CustomDropdown(Icons.abc, 'Select Category', _categories),
+                                  CustomDropdown(Icons.abc, 'Select Category', _categories, (){}),
                             )),
                       ],
                     ),
                   ),
                   Container(
                     padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                    child: CustomDropdown(Icons.abc, 'Payment Method', _categories),
+                    child: CustomDropdown(Icons.abc, 'Payment Method', _categories, (){}),
                   ),
                   Container(
                     width: double.infinity,

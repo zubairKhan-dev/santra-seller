@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_login_regis_provider/providers/seller_provider.dart';
 import 'package:flutter_login_regis_provider/screens/seller_home/bottom.dart';
+import 'package:flutter_login_regis_provider/widgets/custom_dropdown.dart';
+import 'package:flutter_login_regis_provider/widgets/loading.dart';
 import 'package:flutter_svg/svg.dart';
-
+import 'package:provider/provider.dart';
 import '../../Constants/my_colors.dart';
+import 'package:flushbar/flushbar.dart';
 
 class AddNewCAtegory extends StatefulWidget {
   AddNewCAtegory({Key key}) : super(key: key);
@@ -12,22 +16,64 @@ class AddNewCAtegory extends StatefulWidget {
 }
 
 class _AddNewCAtegoryState extends State<AddNewCAtegory> {
+  final formKey = GlobalKey<FormState>();
   List<String> categoryList = ["Select Category", "Food", "Clothing", "Beauty"];
   String selectedCat = "Select Category";
+
   void _onItemTapped(int index) {
     setState(() {
       widget.selectedIndex = index;
     });
   }
 
+  var category_name= '';
+  var category_type= '';
+
   @override
   Widget build(BuildContext context) {
+    SellerProvider seller = Provider.of<SellerProvider>(context);
+
     Size size = MediaQuery.of(context).size;
+
+    //add category
+    var addNewCategory = () async {
+      final form = formKey.currentState;
+      if (form.validate()) {
+        form.save();
+        seller.add_categories(category_name, category_type).then((response) {
+          print(response);
+          if (response['status']) {
+            Flushbar(
+              title: 'Success!',
+              message: response['message'],
+              duration: Duration(seconds: 3),
+            ).show(context);
+          } else {
+            Flushbar(
+              title: 'Fail!',
+              message: response['messsage'],
+              duration: Duration(seconds: 3),
+            ).show(context);
+          }
+        });
+      }
+      else {
+        Flushbar(
+          title: 'Invalid form',
+          message: 'Please complete the form properly',
+          duration: Duration(seconds: 3),
+        ).show(context);
+      }
+    };
+
     return SafeArea(
         child: Scaffold(
       bottomNavigationBar: Bottom(),
       backgroundColor: MyColors.prime,
       body: SingleChildScrollView(
+          child: 
+          Form(
+            key: formKey,
         child: Column(
           children: [
             Container(
@@ -105,7 +151,8 @@ class _AddNewCAtegoryState extends State<AddNewCAtegory> {
                       padding:
                           EdgeInsets.symmetric(horizontal: size.width * 0.07),
                       child: TextFormField(
-                        // controller: searchController,
+                        validator: (value) =>
+                            value.isEmpty ? 'Please enter category name' : null,
                         decoration: const InputDecoration(
                           enabledBorder: UnderlineInputBorder(
                             borderSide: BorderSide(color: MyColors.prime),
@@ -118,6 +165,7 @@ class _AddNewCAtegoryState extends State<AddNewCAtegory> {
                           fillColor: Colors.white,
                         ),
                         cursorColor: MyColors.prime,
+                        onChanged: ((value) => category_name=value),
                       ),
                     ),
                     SizedBox(height: size.height * 0.05),
@@ -128,41 +176,8 @@ class _AddNewCAtegoryState extends State<AddNewCAtegory> {
                         decoration: const BoxDecoration(
                             border: Border(
                                 bottom: BorderSide(color: MyColors.prime))),
-                        child: DropdownButton<String>(
-                          value: selectedCat,
-                          icon: Expanded(
-                            child: Row(
-                              children: const [
-                                Spacer(),
-                                Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Icon(Icons.arrow_drop_down),
-                                ),
-                              ],
-                            ),
-                          ),
-                          elevation: 16,
-                          underline: const SizedBox(),
-                          onChanged: (String newValue) {
-                            setState(() {
-                              selectedCat = newValue;
-                              print(newValue);
-                            });
-                          },
-                          items: categoryList
-                              .map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(
-                                value.toString(),
-                                style: const TextStyle(
-                                  color: MyColors.second,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            );
-                          }).toList(),
-                        ),
+                        child: 
+                        CustomDropdown(null, 'Select category',categoryList, (val)=> category_type= val),
                       ),
                     ),
                     SizedBox(
@@ -172,15 +187,20 @@ class _AddNewCAtegoryState extends State<AddNewCAtegory> {
                       padding:
                           EdgeInsets.symmetric(horizontal: size.width * 0.07),
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          addNewCategory();
+                        },
                         style: ElevatedButton.styleFrom(
                           primary: MyColors.second,
                         ),
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 0, vertical: size.height * 0.02),
-                          child: const Text("Add Categories"),
-                        ),
+                        child: seller.isLoading
+                            ? Loading()
+                            : Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 0,
+                                    vertical: size.height * 0.02),
+                                child: const Text("Add Categories"),
+                              ),
                       ),
                     ),
                   ],
@@ -189,7 +209,7 @@ class _AddNewCAtegoryState extends State<AddNewCAtegory> {
             ),
           ],
         ),
-      ),
+      )),
     ));
   }
 }

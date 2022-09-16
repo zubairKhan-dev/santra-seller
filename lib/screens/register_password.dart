@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_login_regis_provider/screens/dashboard.dart';
 import 'package:flutter_login_regis_provider/screens/register.dart';
 import 'package:flutter_login_regis_provider/widgets/app_title.dart';
 import 'package:flutter_login_regis_provider/widgets/input_decoration_standard.dart';
 import '../widgets/input_decoration.dart';
+import 'package:provider/provider.dart';
+import '../providers/auth_provider.dart';
+import 'package:flushbar/flushbar.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../providers/user_provider.dart';
 
 class RegisterPassword extends StatefulWidget {
   const RegisterPassword({Key key}) : super(key: key);
@@ -15,6 +22,8 @@ class RegisterPassword extends StatefulWidget {
 
 class _RegisterPasswordState extends State<RegisterPassword> {
   bool terms = false;
+  var mobile;
+  var password;
 
   _showBottomModal(context) {
     showModalBottomSheet(
@@ -123,8 +132,36 @@ class _RegisterPasswordState extends State<RegisterPassword> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context)  {
+    AuthProvider auth = Provider.of<AuthProvider>(context);
+    
+
+    var addNewPassword = () {
+      final Future<Map<String, dynamic>> respose =
+          auth.addNewPassword(mobile, password);
+
+      respose.then((response) async{
+        print('response in main file');
+        print(respose);
+        if (response['status']){
+          Provider.of<UserProvider>(context, listen: false).setUser(response['data']);
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Register(),
+              ));
+        } else {
+          Flushbar(
+            title: "Failed Register",
+            message: response['message'],
+            duration: Duration(seconds: 3),
+          ).show(context);
+        }
+      });
+    };
+
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
@@ -157,6 +194,11 @@ class _RegisterPasswordState extends State<RegisterPassword> {
             TextFormField(
               autofocus: false,
               decoration: standardInputDecoration('Email/Number', Icons.email),
+              onChanged: (val) {
+                setState(() {
+                  mobile = val;
+                });
+              },
             ),
             SizedBox(
               height: 20.0,
@@ -164,6 +206,11 @@ class _RegisterPasswordState extends State<RegisterPassword> {
             TextFormField(
               autofocus: false,
               decoration: standardInputDecoration('Password', Icons.password),
+              onChanged: (val) {
+                setState(() {
+                  password = val;
+                });
+              },
             ),
             SizedBox(
               height: 20.0,
@@ -173,11 +220,7 @@ class _RegisterPasswordState extends State<RegisterPassword> {
               child: FlatButton(
                 onPressed: terms == true
                     ? () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Register(),
-                            ));
+                        addNewPassword();
                       }
                     : null,
                 color: Color(0xFF265198),

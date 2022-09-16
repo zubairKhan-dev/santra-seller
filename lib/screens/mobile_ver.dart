@@ -37,7 +37,8 @@ class MobileVer extends StatelessWidget {
                 style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.w500,
-                    color: Color(0xFF265198)),
+                    color: Color(0xFF265198)
+                    ),
               ),
               SizedBox(height: 50,),
               Text(

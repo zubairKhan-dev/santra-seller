@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_login_regis_provider/models/user.dart';
 import 'package:flutter_login_regis_provider/providers/user_provider.dart';
 import 'package:flutter_login_regis_provider/utility/shared_preference.dart';
@@ -13,6 +14,8 @@ class _DashBoardState extends State<DashBoard> {
   @override
   Widget build(BuildContext context) {
     User user = Provider.of<UserProvider>(context).user;
+    print('finally');
+    print(user.userId);
 
     return Scaffold(
       appBar: AppBar(
@@ -24,7 +27,7 @@ class _DashBoardState extends State<DashBoard> {
           SizedBox(
             height: 100,
           ),
-          Center(child: Text('${user.email}')),
+          Center(child: Text('${user.userId}')),
           SizedBox(height: 100),
           RaisedButton(
             onPressed: () {

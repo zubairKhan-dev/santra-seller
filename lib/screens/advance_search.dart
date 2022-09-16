@@ -79,14 +79,14 @@ class _AdvacedSearchState extends State<AdvacedSearch> {
                             child: Container(
                                 padding: EdgeInsets.all(10),
                                 child: CustomDropdown(
-                                    null, 'Select Category', list)),
+                                    null, 'Select Category', list, (){})),
                           ),
                           Expanded(
                             flex: 1,
                             child: Container(
                               padding: EdgeInsets.all(10),
                                 child: CustomDropdown(
-                                    null, 'Select Reviews', list)),
+                                    null, 'Select Reviews', list, (){})),
                           ),
                         ]),
                         Padding(

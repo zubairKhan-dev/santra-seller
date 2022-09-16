@@ -1,36 +1,73 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_login_regis_provider/config/theme/theme_config.dart';
-import 'package:flutter_login_regis_provider/screens/mobile_ver.dart';
 import 'package:flutter_login_regis_provider/widgets/app_title.dart';
 import '../widgets/mobile_input.dart';
-import 'package:flutter_login_regis_provider/providers/auth_provider.dart';
+import '../providers/auth_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:flushbar/flushbar.dart';
+import 'package:dio/dio.dart';
+import '../utility/app_url.dart';
+import '../screens/mobile_ver.dart';
 
-class RegisterMobile extends StatelessWidget {
+class RegisterMobile extends StatefulWidget {
+  @override
+  State<RegisterMobile> createState() => _RegisterMobileState();
+}
+
+class _RegisterMobileState extends State<RegisterMobile> {
   String mobile;
+
   bool mobile_ver = true;
+  var prefixVal= '';
+  var mobVal= '';
+ 
+
+  
+
+ List prefix= [];
+  Map json = {};
+
+  Future<Map<String, dynamic>> getPrefix() async {
+    var result;
+
+    Response response = await Dio().get(AppUrl.getPrefix);
+
+    if (response.statusCode == 200) {
+      print('done-lists');
+      print(response.data['data']);
+      setState(() {
+        prefix= response.data['data'];
+      });
+      
+      print('prefixxxxxxxxxxxxx');
+    print(prefix);
+    } else {}
+
+    return result;
+  }
+
+  void initState() {
+    super.initState();
+    getPrefix();
+    
+  }
+
+  void getPrefixVal(val) {
+    setState(() {
+      prefixVal= val;
+    });
+    print(prefixVal);
+  }
+
+  void getMobVal(val) {
+    setState(() {
+      mobVal= val;
+    });
+    print(mobVal);
+  }
+  
 
   @override
   Widget build(BuildContext context) {
     AuthProvider auth = Provider.of<AuthProvider>(context);
-
-    var sendOtp = () {
-      auth.notify();
-
-      auth.verify(mobile).then((response) {
-        if (response['status']) {
-          print('yaay');
-          print(response);
-        } else {
-          Flushbar(
-            title: 'Registration fail',
-            message: response.toString(),
-            duration: Duration(seconds: 10),
-          ).show(context);
-        }
-      });
-    };
 
     return Scaffold(
       resizeToAvoidBottomInset : false,
@@ -66,7 +103,7 @@ class RegisterMobile extends StatelessWidget {
             SizedBox(
               height: 20,
             ),
-            MobileInput(),
+            MobileInput(prefix, getPrefixVal, getMobVal),
             SizedBox(
               height: 20.0,
             ),
@@ -74,6 +111,7 @@ class RegisterMobile extends StatelessWidget {
               width: double.infinity,
               child: FlatButton(
                 onPressed: () {
+                  auth.sendOtp(prefixVal.toString()+mobVal.toString());
                   Navigator.push(
                       context,
                       MaterialPageRoute(

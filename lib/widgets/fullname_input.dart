@@ -3,6 +3,11 @@ import 'package:flutter_login_regis_provider/widgets/input_decoration_standard.d
 import './input_decoration.dart';
 
 class FullNameInput extends StatelessWidget {
+
+  final Function onSaveFirstName;
+  final Function onSaveLastName;
+  const FullNameInput(this.onSaveFirstName, this.onSaveLastName);
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -14,7 +19,8 @@ class FullNameInput extends StatelessWidget {
             flex: 1,
             child: Container(
               padding: EdgeInsets.fromLTRB(size.width* 0.07, size.height * 0.005, size.width* 0.03, size.height * 0.005),
-              child: TextField(
+              child: TextFormField(
+                onSaved: (value) => onSaveFirstName(value),
                 style: TextStyle(fontSize: 16),
                 decoration: standardInputDecoration(
                   'First Name',
@@ -27,7 +33,8 @@ class FullNameInput extends StatelessWidget {
             flex: 1,
             child: Container(
              padding: EdgeInsets.fromLTRB(size.width* 0.03, size.height * 0.005, size.width* 0.07, size.height * 0.005),
-              child: TextField(
+              child: TextFormField(
+                onSaved: (value) => onSaveLastName(value),
                 style: TextStyle(fontSize: 16),
                 decoration: standardInputDecoration(
                   'Last Name',
